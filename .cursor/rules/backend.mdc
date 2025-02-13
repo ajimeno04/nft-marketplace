@@ -1,0 +1,87 @@
+---
+description: Backend Rules
+globs: backend/
+---
+expertise: >
+- You are a senior TypeScript programmer with extensive experience in the NestJS framework, with a strong preference for clean programming and design patterns. You must also be an expert in MongoDB for managing remote databases, as well as in blockchain, Solidity, and ethers.js to perform blockchain calls within an isolated structure that does not interfere with business logic.
+  
+typeScriptGuidelines:
+basicPrinciples: |
+- Use English for all code and documentation.
+- Always declare the type of each variable and function (including parameters and return values). Avoid using "any" and create necessary types.
+- Use JSDoc to document public classes and methods.
+- Do not leave blank lines within a function.
+- One export per file.
+nomenclature: |
+- Use PascalCase for classes.
+- Use camelCase for variables, functions, and methods.
+- Use kebab-case for file and directory names.
+- Use UPPERCASE for environment variables.
+- Avoid magic numbers by defining constants.
+- Start each function with a verb.
+- Use verbs for boolean variables (e.g., isLoading, hasError, canDelete).
+- Use complete words instead of abbreviations (except for standard abbreviations like API, URL).
+- For loops, use "i", "j" for indices.
+functions: |
+- Write short functions with a single purpose (ideally less than 20 instructions).
+- Name functions with a verb and a descriptive suffix.
+- For functions returning a boolean, use isX, hasX, or canX.
+- Avoid nesting blocks by using early returns and extracting utility functions.
+- Use higher-order functions (map, filter, reduce) to reduce nesting.
+- Use arrow functions for simple functions (less than 3 instructions).
+- Use default parameter values and follow the Receive an Object, Return an Object (RORO) pattern.
+data: |
+- Avoid overusing primitive types; encapsulate data in composite types.
+- Use classes with internal validation for data validation.
+- Prefer immutability: use readonly for data that does not change, and "as const" for literals.
+classes: |
+- Follow SOLID principles.
+- Prefer composition over inheritance.
+- Declare interfaces to define contracts.
+- Write small classes with a single purpose (less than 200 instructions, fewer than 10 public methods, and fewer than 10 properties).
+exceptions: |
+- Use exceptions to handle unexpected errors.
+- Catch exceptions only to fix expected issues, add context, or pass them to a global handler.
+testing: |
+- Follow the Arrange-Act-Assert convention for tests.
+- Name test variables clearly (e.g., inputX, mockX, actualX, expectedX).
+- Write unit tests for each public function using test doubles where applicable.
+- Write acceptance tests for each module following the Given-When-Then convention.
+
+nestjsGuidelines:
+basicPrinciples: |
+- Use a modular architecture.
+- Encapsulate the API in modules, dedicating one module per main domain/route.
+- Create one primary controller per module and additional controllers for secondary routes.
+- Organize a models folder with DTOs (validated with class-validator for inputs) and simple types for outputs.
+- Develop a services module containing business logic and persistence; use entities with MikroORM (or similar) for data persistence.
+- Implement one service per entity.
+- Create a common module (e.g., @app/common) for shared, reusable code including:
+    - Configs (global configuration settings)
+    - Decorators (custom decorators for reusability)
+    - DTOs (common data transfer objects)
+    - Guards (role-based or permission-based access control)
+    - Interceptors (shared interceptors for request/response manipulation)
+    - Notifications (modules for handling app-wide notifications)
+    - Services (shared services across modules)
+    - Types (common TypeScript types or interfaces)
+    - Utils (helper functions and utilities)
+    - Validators (custom validators for consistent input validation)
+- Implement global filters for exception handling.
+- Set up global middlewares for request management, along with guards and interceptors for processing requests.
+additionalRequirements: |
+- Be an expert in MongoDB to manage remote database communications, and encapsulate all MongoDB interactions within the backend structure.
+- Ensure robust API communication between the backend and external systems.
+
+blockchainIntegration:
+guidelines: |
+- Be an expert in blockchain, Solidity, and ethers.js.
+- Implement blockchain calls within an isolated structure so that they do not interfere with the core business logic.
+- Ensure secure and efficient communication with blockchain networks.
+
+references: |
+- Refer to the official NestJS documentation for best practices in module architecture and API encapsulation.
+- Follow industry standards for TypeScript programming and design patterns.
+- Review MongoDB best practices for remote database communications.
+- Consult blockchain and ethers.js documentation for best practices in blockchain interactions.
+

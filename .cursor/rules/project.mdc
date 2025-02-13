@@ -1,0 +1,55 @@
+---
+description: Monorepo Rules
+globs: 
+---
+
+This monorepo is designed for building an NFT marketplace, which consists of three main components:
+- Frontend: A Next.js application.
+- Backend: A Nest.js application connected to Supabase.
+- Contracts: Smart contracts managed with Forge and deployed on Anvil test networks.
+Additionally, there is a "shared" folder to store common data and types between the frontend and backend.
+
+monorepo:
+structure:
+  - packages/frontend: "Next.js application for the marketplace interface."
+  - packages/backend: "Nest.js application connected to the Supabase database."
+  - packages/contracts: "Smart contracts implemented with Forge for deployment on Anvil."
+  - shared: "Folder containing common data and types to ensure consistency between the frontend and backend."
+
+  rules:
+    - Modularization and Logical Separation: "Each module resides in its own directory with well-defined boundaries to avoid unnecessary coupling."
+    - Centralized Dependency Management: "A centralized strategy is used to maintain consistent versions of libraries and tools across all modules."
+    - Automated Integration and Testing: "CI/CD pipelines are configured to run tests and builds only on the specific areas that have been modified."
+    - Coordinated Versioning and Deployment: "A versioning strategy that allows atomic changes across multiple modules and facilitates complete rollbacks in case of errors."
+    - Access Policies and Code Review: "Clear rules define who can modify each part of the code, with structured code reviews to maintain quality and consistency."
+    - Use of Specialized Tools: "Tools such as Turbo are used to orchestrate the complete build, test, and deployment process. Additionally, team members responsible for managing Turbo must be experts in Turbo."
+
+workflow:
+  description: >
+    Marketplace execution process:
+      1. Turbo Initialization: The process is orchestrated and started using Turbo.
+      2. Contract Deployment: Smart contracts are deployed on an Anvil test network using predefined parameters for network creation.
+      3. Mock Data Generation: After the contracts are deployed, custom scripts are executed to generate mock data including pre-created NFTs and pre-configured users.
+      4. Backend Execution: The Nest.js application is launched, connecting to the Supabase database.
+      5. Frontend Execution: The Next.js application is started to serve the user interface.
+  steps:
+    - name: "Deploy Contracts"
+      tool: "Forge"
+      network: "Anvil (Testnet)"
+      parameters: "Predefined parameters for network creation and contract deployment."
+    - name: "Generate Mock Data"
+      tool: "Custom Scripts"
+      details: "Generate NFTs and simulated users for the marketplace."
+    - name: "Start Backend"
+      tool: "Nest.js"
+      connection: "Connection to Supabase."
+    - name: "Start Frontend"
+      tool: "Next.js"
+
+toolchain:
+  - turbo: "Used to orchestrate the complete process (build, test, and deployment) of all modules. See https://turbo.build/repo/docs/ for more details."
+
+notes: >
+  It is essential to maintain consistency in versions, configurations, and coding standards across all modules.
+  The 'shared' folder ensures that reusable data and types are available to both the frontend and backend.
+

@@ -1,0 +1,51 @@
+---
+description: Contracts rules
+globs: contracts/
+---
+expertise: >
+You are an expert in Solidity, Foundry, and blockchain development focused on NFT marketplaces.
+You have extensive experience working with the ERC1155 token standard and excel at writing secure,
+optimized, and maintainable smart contracts.
+
+solidityGuidelines:
+keyPrinciples: |
+- Write concise, secure, and optimized Solidity code.
+- Follow best practices for smart contract development, including modular design and separation of concerns.
+- Use explicit visibility modifiers for functions and state variables.
+- Utilize libraries and interfaces for reusable code.
+- Document code thoroughly using NatSpec comments.
+- Adhere to the latest Solidity version best practices (e.g., use version pragma ^0.8.0).
+erc1155Standard: |
+- Implement the ERC1155 standard functions and events as defined in the EIP.
+- Use safe transfer functions (safeTransferFrom, safeBatchTransferFrom) to ensure compliance.
+- Properly manage token URIs, metadata, and batch operations.
+marketplaceFeatures: |
+- Implement core marketplace functionalities: listing, buying, and selling NFTs.
+- Enable marketplace fees or commissions with configurable parameters.
+- Ensure secure ownership transfers and include robust approval mechanisms.
+errorHandlingAndSecurity: |
+- Use require statements to enforce preconditions and validate inputs early.
+- Handle edge cases with guard clauses.
+- Prevent reentrancy and other common smart contract vulnerabilities.
+- Reference OpenZeppelin's security libraries for best practices.
+
+workflow:
+structure: |
+- contracts/:
+    - contracts/Marketplace.sol: "Main contract for the NFT marketplace implementing ERC1155."
+    - contracts/Token.sol: "ERC1155 token implementation (custom if needed; otherwise, refer to OpenZeppelin)."
+    - contracts/interfaces/: "Interfaces and abstract contracts for modularity."
+    - contracts/libraries/: "Reusable libraries for contract logic."
+    - test/: "Foundry tests covering all contracts and functionalities."
+    - script/: "Deployment and migration scripts using Foundry."
+testingAndDeployment: |
+- Use Foundry's Forge framework for compiling and testing contracts.
+- Write comprehensive unit tests for each contract function.
+- Integrate Foundry tests into the CI/CD pipeline.
+- Use deployment scripts to deploy contracts on test networks (e.g., Anvil) with predefined parameters.
+
+references: |
+  - Refer to the Solidity official documentation for language best practices.
+  - Follow the ERC1155 EIP specification.
+  - Consult Foundry documentation for compiling, testing, and deployment guidelines.
+  - Consider OpenZeppelin contracts as a benchmark for secure smart contract design.
