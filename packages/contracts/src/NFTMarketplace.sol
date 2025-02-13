@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title NFTCollection
  * @dev ERC1155 contract that allows the creation of NFTs with associated metadata (image and description).
- * Each deployment represents a distinct NFT collection. This contract adheres to @contracts.mdc rules.
+ * Each deployment represents a distinct NFT collection.
  */
 contract NFTCollection is ERC1155, Ownable {
     uint256 private _currentTokenId = 0;
@@ -19,10 +20,10 @@ contract NFTCollection is ERC1155, Ownable {
     event NFTMinted(uint256 indexed tokenId, address indexed creator, string image, string description);
 
     /**
-     * @dev Constructor sets the base URI for the collection.
-     * @param uri_ Base URI for all tokens
+     * @dev Sets the base URI for the collection and assigns the deployer as owner.
+     * @param uri_ Base URI for all tokens.
      */
-    constructor(string memory uri_) ERC1155(uri_) {}
+    constructor(string memory uri_) ERC1155(uri_) Ownable(msg.sender) {}
 
     /**
      * @notice Mint a new NFT with associated image and description.
@@ -44,9 +45,8 @@ contract NFTCollection is ERC1155, Ownable {
 /**
  * @title NFTMarketplace
  * @dev Contract for listing, buying, and canceling NFT listings from any ERC1155 collection.
- * Implements secure transactions and follows @contracts.mdc rules.
  */
-contract NFTMarketplace is Ownable {
+contract NFTMarketplace is Ownable, ReentrancyGuard {
     struct Listing {
         address seller;
         uint256 price; // Price in wei
@@ -60,6 +60,11 @@ contract NFTMarketplace is Ownable {
     event NFTUnlisted(address indexed nftContract, uint256 indexed tokenId, address seller);
 
     /**
+     * @dev Sets the deployer as the initial owner.
+     */
+    constructor() Ownable(msg.sender) {}
+
+    /**
      * @notice List an NFT for sale.
      * @param nftContract Address of the NFT collection contract.
      * @param tokenId Token identifier.
@@ -67,6 +72,8 @@ contract NFTMarketplace is Ownable {
      */
     function listNFT(address nftContract, uint256 tokenId, uint256 price) external {
         require(price > 0, "Price must be greater than zero");
+        // Ensure the NFT is not already listed
+        require(listings[nftContract][tokenId].price == 0, "NFT already listed");
         // Verify ownership
         require(ERC1155(nftContract).balanceOf(msg.sender, tokenId) >= 1, "Caller does not own the NFT");
         listings[nftContract][tokenId] = Listing(msg.sender, price);
@@ -78,14 +85,19 @@ contract NFTMarketplace is Ownable {
      * @param nftContract Address of the NFT collection contract.
      * @param tokenId Token identifier.
      */
-    function buyNFT(address nftContract, uint256 tokenId) external payable {
+    function buyNFT(address nftContract, uint256 tokenId) external payable nonReentrant {
         Listing memory listing = listings[nftContract][tokenId];
         require(listing.price > 0, "NFT not listed for sale");
         require(msg.value >= listing.price, "Insufficient funds");
+
         // Remove listing before external calls to prevent reentrancy
         delete listings[nftContract][tokenId];
-        // Transfer funds to seller
-        payable(listing.seller).transfer(listing.price);
+
+        // Transfer funds to seller using call to prevent gas limit issues
+        (bool success, ) = listing.seller.call{value: listing.price}(""
+        );
+        require(success, "Transfer failed");
+
         // Transfer NFT from seller to buyer
         ERC1155(nftContract).safeTransferFrom(listing.seller, msg.sender, tokenId, 1, "");
         emit NFTSold(nftContract, tokenId, msg.sender, listing.price);
@@ -102,4 +114,4 @@ contract NFTMarketplace is Ownable {
         delete listings[nftContract][tokenId];
         emit NFTUnlisted(nftContract, tokenId, msg.sender);
     }
-} 
+}
