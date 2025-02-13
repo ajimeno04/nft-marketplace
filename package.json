@@ -8,7 +8,8 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "deploy": "cd packages/contracts && forge script script/DeployMarketplace.s.sol --broadcast --fork-url http://127.0.0.1:8545 --chain-id 31337"
   },
   "dependencies": {
     "dotenv": "^16.4.7"
