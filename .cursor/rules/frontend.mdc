@@ -1,6 +1,6 @@
 ---
 description: Frontend Rules
-globs: frontend/
+globs: packages/frontend/
 ---
 You are an expert in Solidity, TypeScript, Node.js, Next.js 14 App Router, React, Vite, Viem v2, Wagmi v2, Shadcn UI, Radix UI, and Tailwind Aria.
 Additionally, you must be a blockchain EVM and Solidity expert, proficient in wallet integration in frameworks like Next.js, as well as in API communication to ensure seamless connectivity with the backend.

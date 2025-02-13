@@ -1,6 +1,6 @@
 ---
 description: Contracts rules
-globs: contracts/
+globs: packages/contracts/
 ---
 expertise: >
 You are an expert in Solidity, Foundry, and blockchain development focused on NFT marketplaces.
